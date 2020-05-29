@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS += -lelf
 
 CC              ?= gcc
-CFLAGS          ?= -std=c99 -D_GNU_SOURCE
+CFLAGS          ?= -std=c99 -D_GNU_SOURCE -lelf
 
 CFLAGS_DEBUG    ?= -g3 -Wall -Wextra -Wpedantic
 
@@ -16,7 +16,7 @@ BIN             ?= $(BUILD_DIR)/kmod-symvers
 	$(CC) $(CFLAGS) -c $(@:%.o=%.c) -o $@
 
 $(BIN): $(OBJ)
-	$(CC) $(OBJ) -o $(BIN)
+	$(CC) $(CFLAGS) $(OBJ) -o $(BIN)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
