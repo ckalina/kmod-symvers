@@ -10,6 +10,8 @@ values.
 
 ## Demo
 
+### Changing the checksum value
+
 ```
 $ grep xor_blocks Module.symvers
 0x5b6c00e6      xor_blocks      crypto/xor      EXPORT_SYMBOL
@@ -45,6 +47,29 @@ cmp: EOF on /tmp/xor.ko after byte 23960
 0000515A 00 56
 0000515B 6C 34
 0000515C 5B 12
+```
+
+### insmod test
+
+```
+$ insmod ./xor.ko
+$ rmmod xor
+$ lsmod | grep xor
+$ ./kmod-symvers/bin/kmod-symvers ./xor.ko
+0x15244c9d      boot_cpu_data                                   __versions
+$ ./kmod-symvers/bin/kmod-symvers ./xor.ko boot_cpu_data 15244c9e
+0x15244c9e      boot_cpu_data                                   __versions
+$ insmod ./xor.ko
+insmod: ERROR: could not insert module ./xor.ko: Invalid parameters
+$ dmesg | tail
+[2618670.121990] xor: disagrees about version of symbol boot_cpu_data
+[2618670.126643] xor: Unknown symbol boot_cpu_data (err -22)
+$ ./kmod-symvers/bin/kmod-symvers ./xor.ko boot_cpu_data 15244c9d
+0x15244c9d      boot_cpu_data                                   __versions
+$ insmod ./xor.ko
+$ lsmod | grep xor -q && echo OK
+OK
+                        
 ```
 
 ## Remarks
