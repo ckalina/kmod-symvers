@@ -49,6 +49,22 @@ int main(int argc, const char **argv)
         }
     }
 
+	Elf_Data *data_ver = elf_newdata(__versions.section);
+	data_ver->d_buf = __versions.data->d_buf;
+	data_ver->d_size = 0;
+	data_ver->d_align = __versions.data->d_align;
+	data_ver->d_type = ELF_T_BYTE;
+
+	Elf_Data *data_sym = elf_newdata(symtab.section);
+	data_sym->d_buf = symtab.data->d_buf;
+	data_sym->d_size = 0;
+	data_sym->d_align = symtab.data->d_align;
+	data_sym->d_type = ELF_T_BYTE;
+
+	loff_t file_sz = elf_update(file.elf, ELF_C_WRITE);
+	if (file_sz == -1)
+		fail("cannot update ELF image");
+
     elf_close(&file);
 
     return 0;
