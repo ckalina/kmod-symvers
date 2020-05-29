@@ -2,10 +2,8 @@
 
 #include <fcntl.h>
 #include <string.h>
-#include <libelf.h>
 #include <unistd.h>
 #include <stddef.h>
-#include <gelf.h>
 
 #include "utils.h"
 
